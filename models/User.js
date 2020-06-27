@@ -1,4 +1,4 @@
-// importing Modle and DataTypes classes from sequelize
+// importing Model class and DataTypes object from sequelize
 const { Model, DataTypes } = require('sequelize');
 // importing our instance of sequelize
 const sequelize = require('../config/connection');
@@ -11,6 +11,38 @@ class User extends Model {}
 User.init(
     {
         //Table column definitions go here
+        id: {
+            // DataTypes is a special Sequelize object to provide what type of data it is
+            type: DataTypes.INTEGER,
+            // equivalent to SQL 'NOT NULL'
+            allowNull: false,
+            // makes this column the primary key
+            primaryKey: true,
+            // turns on auto increment
+            autoIncrement: true
+        },
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            // enforces that there are no duplicate values in this column
+            unique: true,
+            // checks to see if the value entered meets the criteria for an email address
+            validate: {
+                isEmail: true
+            }
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                // sets a requirement for length of the value
+                len: [4]
+            }
+        }
     },
     {
         // Table configuration options go here
